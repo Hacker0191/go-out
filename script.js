@@ -5,7 +5,7 @@ const yesBtn = document.getElementById("yes-btn");
 const noBtn = document.getElementById("no-btn");
 
 yesBtn.addEventListener("click", () => {
-  question.innerHTML = "Yay, see you on the 14th of Feb!";
+  question.innerHTML = "Yay, see you soon!";
   gif.src = "https://media.giphy.com/media/UMon0fuimoAN9ueUNP/giphy.gif";
 });
 
