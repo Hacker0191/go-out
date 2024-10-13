@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Personalized Link</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="wrapper">
+    <div class="container">
+      <h2>Create Your Personalized Link</h2>
+
+      <form action="/create" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="name">Their Name:</label>
+          <input type="text" name="name" id="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="slug">Custom Link Slug:</label>
+          <input type="text" name="slug" id="slug" required>
+        </div>
+
+        <div class="form-group">
+          <label for="note">Personal Note (optional):</label>
+          <textarea name="note" id="note" placeholder="Write a note"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="file">Attach a file (optional):</label>
+          <input type="file" name="file" id="file">
+        </div>
+
+        <button type="submit" class="btn">Create Link</button>
+      </form>
+
+      <% if (error) { %>
+        <p class="error-message"><%= error %></p>
+      <% } %>
+
+      <% if (personalizedLink) { %>
+        <h3>Your personalized link:</h3>
+        <p><a href="<%= personalizedLink %>" class="personalized-link"><%= personalizedLink %></a></p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

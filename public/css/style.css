@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  #wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  label {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 8px;
+    color: #555;
+  }
+  
+  input[type="text"], textarea, input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+  
+  textarea {
+    resize: none;
+    height: 100px;
+  }
+  
+  input[type="file"] {
+    padding: 5px;
+  }
+  
+  button.btn {
+    width: 100%;
+    background-color: #e94d58;
+    color: white;
+    border: none;
+    padding: 12px 0;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button.btn:hover {
+    background-color: #d83c4a;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 10px;
+  }
+  
+  .personalized-link {
+    color: #e94d58;
+    text-decoration: none;
+    word-break: break-word;
+  }
+  
+  .personalized-link:hover {
+    text-decoration: underline;
+  }
+  

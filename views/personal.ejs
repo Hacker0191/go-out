@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do you want to go out with me?</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    #wrapper {
+      text-align: center;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+    }
+
+    #btn-group {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      color: white;
+      width: 120px;
+    }
+
+    #yes-btn {
+      background-color: #4CAF50;
+    }
+
+    #yes-btn:hover {
+      background-color: #45a049;
+      transform: scale(1.1);
+    }
+
+    #no-btn {
+      background-color: #e94d58;
+    }
+
+    #no-btn:hover {
+      background-color: #e57373;
+      transform: scale(1.1);
+    }
+
+    #no-btn {
+      position: relative;
+    }
+
+    #personal-note {
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 10px;
+      display: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #file-section {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    #file-section h3 {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+
+    #file-section img {
+      max-width: 100%;
+      border-radius: 5px;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes disappear {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Fullscreen */
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+    <div id="wrapper">
+        <h2 id="question">Hey <%= name %>, will you go out with me?</h2>
+        <!-- Removed bouncing effect from gif by setting 'animation: none' -->
+        <img id="gif" alt="gif" src="/img/gif1.gif" style="animation: none; transform: none;" />
+      
+        <div id="btn-group">
+          <button id="yes-btn">Yes</button>
+          <button id="no-btn">No</button>
+        </div>
+      
+        <div id="personal-note" style="display:none;">
+          <h3>Your personal note:</h3>
+          <p><%= note %></p>
+        </div>
+      
+        <% if (fileUrl) { %>
+          <div id="file-section" style="display:none;">
+            <h3>Attached File:</h3>
+            <% if (fileUrl.match(/\.(jpeg|jpg|gif|png)$/)) { %>
+              <!-- Removed bouncing effect from attached image by setting 'animation: none' -->
+              <img src="<%= fileUrl %>" alt="Attached File" id="attached-img" style="max-width: 200px; cursor: pointer; animation: none; transform: none;">
+            <% } else { %>
+              <a href="<%= fileUrl %>" target="_blank">Download Attached File</a>
+            <% } %>
+          </div>
+        <% } %>
+      
+        <!-- Modal for image preview -->
+        <div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center;">
+          <span id="close-modal" style="position: absolute; top: 10px; right: 20px; font-size: 24px; cursor: pointer; color: white;">&times;</span>
+          <img id="modal-img" style="max-width: 90%; max-height: 90%;">
+        </div>
+      </div>
+      
+
+  <script>
+   const yesBtn = document.getElementById("yes-btn");
+const noBtn = document.getElementById("no-btn");
+const personalNote = document.getElementById("personal-note");
+const fileSection = document.getElementById("file-section");
+
+yesBtn.addEventListener("click", () => {
+  document.getElementById("question").innerHTML = "Yay, see you soon!";
+  document.getElementById("gif").src = "/img/gif2.gif";
+  
+  // Hide buttons and show personal note and file section
+  setTimeout(() => {
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    personalNote.style.display = "block";
+    fileSection.style.display = "block";
+    
+    // Apply fade-in effect
+    personalNote.style.animation = "fadeIn 1s ease forwards";
+    fileSection.style.animation = "fadeIn 1s ease forwards";
+  }, 500);
+});
+
+// No button movement (as per your existing logic)
+noBtn.addEventListener("mouseover", () => {
+  const noBtnRect = noBtn.getBoundingClientRect();
+  const maxX = window.innerWidth - noBtnRect.width;
+  const maxY = window.innerHeight - noBtnRect.height;
+
+  const randomX = Math.floor(Math.random() * maxX);
+  const randomY = Math.floor(Math.random() * maxY);
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+});
+
+// Modal for the attached image
+const attachedImg = document.getElementById("attached-img");
+const modal = document.getElementById("modal");
+const modalImg = document.getElementById("modal-img");
+const closeModal = document.getElementById("close-modal");
+
+if (attachedImg) {
+  attachedImg.addEventListener("click", () => {
+    modal.style.display = "flex";
+    modalImg.src = attachedImg.src;
+  });
+
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  // Close the modal when clicking outside the image
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+}
+
+    // Auto-save feature using localStorage
+    const form = document.getElementById('personalizedForm');
+
+    // Function to save form data to localStorage
+    function saveFormData() {
+      const formData = {
+        name: document.getElementById('name').value,
+        slug: document.getElementById('slug').value,
+        note: document.getElementById('note').value,
+      };
+      localStorage.setItem('personalizedFormData', JSON.stringify(formData));
+    }
+
+    // Function to load saved form data from localStorage
+    function loadFormData() {
+      const savedData = JSON.parse(localStorage.getItem('personalizedFormData'));
+      if (savedData) {
+        document.getElementById('name').value = savedData.name || '';
+        document.getElementById('slug').value = savedData.slug || '';
+        document.getElementById('note').value = savedData.note || '';
+      }
+    }
+
+    // Event listeners for form inputs to trigger autosave
+    form.addEventListener('input', saveFormData);
+
+    // Load saved data when the page loads
+    window.addEventListener('load', loadFormData);
+
+    // Clear saved data from localStorage on successful submission
+    form.addEventListener('submit', function() {
+      localStorage.removeItem('personalizedFormData');
+    });
+  </script>
+  
+</body>
+</html>
