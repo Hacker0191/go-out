@@ -2,14 +2,29 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const admin = require('firebase-admin'); // Import Firebase Admin
+const dotenv = require('dotenv'); // Import dotenv
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Firebase configuration
-const serviceAccount = require('./firebase-key.json'); // Update the path to your service account file
+const serviceAccount = {
+    type: "service_account",
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Replace escaped newlines
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.CLIENT_ID,
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: `https://www.googleapis.com/robot/v1/metadata/x509/${process.env.FIREBASE_CLIENT_EMAIL}`,
+};
 
 // Initialize Firebase Admin
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://go-out-50027-default-rtdb.firebaseio.com" // Your database URL
+    databaseURL: process.env.DATABASE_URL // Your database URL from .env
 });
 
 // Reference to the Firebase database
@@ -22,10 +37,11 @@ const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+// Configure Cloudinary
 cloudinary.config({
-    cloud_name: 'dfqyzvyuh', 
-    api_key: '678328938827271', 
-    api_secret: '8mxa_25Sp2OVB3Lq-ARm8Jg7VWs'
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 // Configure Multer to use Cloudinary for storage
